@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import {useEffect, useState} from "react";
+import axios from "axios";
 import CheckButton from "react-validation/build/button";
 import TutorialDataService from "../../../services/tutorial.service";
 
@@ -17,7 +17,8 @@ class AdsForm extends Component {
           title: "",
           location: "",
           published: false,
-          file: ""
+          file: "",
+          filename:""
         };
       }
 
@@ -34,16 +35,8 @@ class AdsForm extends Component {
       }
 
       onChangeFile(e) {
-        TutorialDataService.uploadfile(e.target.files[0])
-          .then(response => {
-            this.setState({
-            });
-            console.log(response);
-          })
-          .catch(e => {
-            console.log(e);
-          });
         this.setState({ file: e.target.files[0] })
+        this.setState({ filename: e.target.files[0].name })
       }
 
       onChangePublished(e) {
@@ -53,12 +46,19 @@ class AdsForm extends Component {
       }
 
       saveTutorial() {
-        
+        const formData = new FormData();
+        formData.append("file", this.state.file);
+        formData.append("fileName", this.state.filename);
+        const res = axios.post(
+          "http://localhost:8080/api/upload",
+          formData
+        );
           var data = {
             title: this.state.title,
             location: this.state.location,
+            file:this.state.filename,
             published: this.state.published,
-          };
+          };    
           
           TutorialDataService.create(data)
             .then(response => {

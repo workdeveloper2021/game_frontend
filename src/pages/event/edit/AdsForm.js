@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-
+import axios from "axios";
 import CheckButton from "react-validation/build/button";
 import TutorialDataService from "../../../services/tutorial.service";
 class AdsForm extends Component {
     constructor(props) {
         super(props);
-        this.saveTutorial = this.saveTutorial.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeLocation = this.onChangeLocation.bind(this);
         this.onChangeFile = this.onChangeFile.bind(this);
@@ -21,7 +20,9 @@ class AdsForm extends Component {
             title: "",
             location: "",
             published: false,
-            file: ""
+            file: "",
+            filename:""
+
           },
           message: ""
         };
@@ -62,13 +63,15 @@ class AdsForm extends Component {
 
       onChangeFile(e) {
         const file = e.target.files[0] ;
-    
+        const filename = e.target.files[0].name ;
         this.setState(function(prevState) {
           return {
             currentTutorial: {
               ...prevState.currentTutorial,
-              file: file
+              file: file,
+              filename: filename
             }
+            
           };
         });
       }
@@ -99,13 +102,16 @@ class AdsForm extends Component {
           });
       }
 
-      updatePublished(status) {
+      updatePublished(status) {        
+       
         var data = {
           id: this.state.currentTutorial.id,
           title: this.state.currentTutorial.title,
+          file:this.state.currentTutorial.filename,
           location: this.state.currentTutorial.location,
           published: status
         };
+        console.log(data)
         var str = window.location.pathname;
         str = str.replace("/edit-event/", "");
         TutorialDataService.update(str, data)
@@ -124,6 +130,13 @@ class AdsForm extends Component {
       }
     
       updateTutorial() {
+        const formData = new FormData();
+        formData.append("file", this.state.currentTutorial.file);
+        formData.append("fileName", this.state.currentTutorial.filename);
+        const res = axios.post(
+          "http://localhost:8080/api/upload",
+          formData
+        );
         var str = window.location.pathname;
         str = str.replace("/edit-event/", "");
         TutorialDataService.update(
@@ -142,37 +155,6 @@ class AdsForm extends Component {
             console.log(e);
           });
       }
-    
-
-      saveTutorial() {
-          var data = {
-            title: this.state.title,
-            location: this.state.location,
-            published: this.state.published,
-            file: this.state.file,
-          };
-      
-          TutorialDataService.create(data)
-            .then(response => {
-              this.setState({
-                id: response.data.id,
-                title: response.data.title,
-                location: response.data.location,
-                published: response.data.published,
-                file: response.data.file,
-      
-                submitted: true
-              });
-              console.log(response.data);
-            })
-            .catch(e => {
-              console.log(e);
-            });
-      }
-    
-      
-
-    
       render() {
         const { currentTutorial } = this.state;
     
@@ -215,10 +197,8 @@ class AdsForm extends Component {
                           id="file"
                           ref="file"
                           name="file"
-                          // value={currentTutorial.file}
-                          // onChange={this.onChangeFile}
+                          onChange={this.onChangeFile}
                       />
-                      {/* <small className="text-danger">{this.state.end_date}</small> */}
                   </div>
     
                   <div className="form-group">

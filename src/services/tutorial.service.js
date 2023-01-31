@@ -14,7 +14,7 @@ class TutorialDataService {
   }
 
   update(id, data) {
-    return http.put(`/events/${id}`, data);
+    return http.post(`/events/${id}`, data);
   }
 
   delete(id) {
@@ -30,7 +30,7 @@ class TutorialDataService {
   }
 
   uploadfile(){    
-    return http.get("/file");
+    return http.post("/uploadfile");
   }
 }
 
