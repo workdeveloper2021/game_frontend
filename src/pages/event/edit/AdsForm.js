@@ -61,7 +61,7 @@ class AdsForm extends Component {
       }
 
       onChangeFile(e) {
-        const file = e.target.value;
+        const file = e.target.files[0] ;
     
         this.setState(function(prevState) {
           return {
@@ -92,7 +92,7 @@ class AdsForm extends Component {
             this.setState({
               currentTutorial: response.data
             });
-            console.log(response.data);
+            // console.log(response.data);
           })
           .catch(e => {
             console.log(e);
@@ -215,8 +215,8 @@ class AdsForm extends Component {
                           id="file"
                           ref="file"
                           name="file"
-                          value={currentTutorial.file}
-                          onChange={this.onChangeFile}
+                          // value={currentTutorial.file}
+                          // onChange={this.onChangeFile}
                       />
                       {/* <small className="text-danger">{this.state.end_date}</small> */}
                   </div>
