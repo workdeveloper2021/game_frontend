@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Link } from 'react-router-dom';
-import ForgotPassword from './ForgotPassword';
+import { Link } from "react-router-dom";
+import ForgotPassword from "./ForgotPassword";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import AuthService from "../../services/auth.service";
 
-const required = value => {
+const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -28,19 +28,19 @@ class Login extends Component {
       email: "",
       password: "",
       loading: false,
-      message: ""
+      message: "",
     };
   }
 
   onChangeUsername(e) {
     this.setState({
-      email: e.target.value
+      email: e.target.value,
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
@@ -49,7 +49,7 @@ class Login extends Component {
 
     this.setState({
       message: "",
-      loading: true
+      loading: true,
     });
 
     this.form.validateAll();
@@ -57,10 +57,10 @@ class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.email, this.state.password).then(
         () => {
-          window.location.href= "/dashboard";
+          window.location.href = "/dashboard";
           // window.location.reload();
         },
-        error => {
+        (error) => {
           const resMessage =
             (error.response &&
               error.response.data &&
@@ -70,27 +70,27 @@ class Login extends Component {
 
           this.setState({
             loading: false,
-            message: resMessage
+            message: resMessage,
           });
         }
       );
     } else {
       this.setState({
-        loading: false
+        loading: false,
       });
     }
   }
 
   render() {
     return (
-    <div className="fullsheet">
+      <div className="fullsheet">
         <div className="auth-form">
-            <div className="avatar"></div>
-            <h4 className="modal-title">Login to Your Account</h4>
+          <div className="avatar"></div>
+          <h4 className="modal-title">Login to Your Account</h4>
 
           <Form
             onSubmit={this.handleLogin}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
@@ -139,7 +139,7 @@ class Login extends Component {
             )}
             <CheckButton
               style={{ display: "none" }}
-              ref={c => {
+              ref={(c) => {
                 this.checkBtn = c;
               }}
             />
