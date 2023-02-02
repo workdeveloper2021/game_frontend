@@ -13,8 +13,9 @@ class TutorialDataService {
     return http.post("/events", data);
   }
 
-  update(id, data) {
-    return http.post(`/events/${id}`, data);
+  update(data) {
+    console.log(data);
+    return http.post(`/events/${data.id}`, data);
   }
 
   delete(id) {
@@ -29,7 +30,7 @@ class TutorialDataService {
     return http.get(`/events?title=${title}`);
   }
 
-  uploadfile(){    
+  uploadfile() {
     return http.post("/uploadfile");
   }
 }
